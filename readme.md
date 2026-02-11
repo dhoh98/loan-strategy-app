@@ -98,24 +98,4 @@ AI Loan Strategy PRO는
 
 ---
 
-## 📂 프로젝트 구조
-
-loan-strategy-app/
-│
-├── app.py
-├── requirements.txt
-│
-├── core/
-│ ├── calculator.py
-│ ├── strategy.py
-│
-├── ui/
-│ ├── components.py
-│ ├── styles.py
-│
-└── NanumGothic.otf
-
-
----
-
 
