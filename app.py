@@ -6,6 +6,20 @@ from core.strategy import recommend_strategy
 from ui.components import kpi_card
 from ui.styles import load_css
 
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import platform
+
+# 한글 폰트 설정
+if platform.system() == "Windows":
+    plt.rcParams['font.family'] = 'Malgun Gothic'
+elif platform.system() == "Darwin":  # Mac
+    plt.rcParams['font.family'] = 'AppleGothic'
+else:
+    plt.rcParams['font.family'] = 'NanumGothic'
+
+plt.rcParams['axes.unicode_minus'] = False
+
 st.set_page_config(page_title="AI Loan Strategy", layout="wide")
 
 st.markdown(load_css(), unsafe_allow_html=True)
