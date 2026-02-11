@@ -2,20 +2,29 @@ def load_css():
     return """
     <style>
 
-        /* 🔹 전체 제목 크기 조정 */
+        /* 🔹 메인 타이틀 */
         h1 {
-            font-size: 28px !important;
-            font-weight: 700;
+            font-size: 32px !important;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 10px;
         }
 
+        /* 🔹 섹션 타이틀 */
         h2 {
-            font-size: 22px !important;
-            font-weight: 600;
+            font-size: 24px !important;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 10px;
         }
 
         h3 {
-            font-size: 18px !important;
+            font-size: 20px !important;
             font-weight: 600;
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 10px;
         }
 
         /* 🔹 KPI 카드 */
