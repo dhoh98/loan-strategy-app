@@ -68,12 +68,21 @@ def plot_radar(score_equal, score_principal):
     values_equal += values_equal[:1]
     values_principal += values_principal[:1]
 
-    plt.figure()
-    plt.polar(angles, values_equal, label="원리금균등")
-    plt.polar(angles, values_principal, label="원금균등")
-    plt.xticks(angles[:-1], categories)
-    plt.legend()
-    st.pyplot(plt)
+    fig, ax = plt.subplots(figsize=(6,4))
+
+    ax.plot(df_equal["월"], df_equal["잔액"], label="원리금균등")
+    ax.plot(df_principal["월"], df_principal["잔액"], label="원금균등")
+
+    ax.set_xlabel("월")
+    ax.set_ylabel("잔액")
+    ax.legend()
+
+    plt.tight_layout()
+
+    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        st.pyplot(fig)
+
 
 
 # ==================================================
