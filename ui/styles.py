@@ -1,28 +1,42 @@
 def load_css():
     return """
     <style>
+
+        /* 🔹 메인 타이틀 */
+        h1 {
+            font-size: 32px !important;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        /* 🔹 섹션 타이틀 */
+        h2 {
+            font-size: 24px !important;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 20px !important;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        /* 🔹 KPI 카드 */
         .kpi-card {
             background: linear-gradient(135deg, #1e3c72, #2a5298);
             padding: 20px;
             border-radius: 15px;
             text-align: center;
             color: white;
+            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        /* 제목 크기 조절 */
-        .css-1v3fvcr h1 {
-            font-size: 32px !important;
-        }
-
-        .css-1v3fvcr h2 {
-            font-size: 24px !important;
-        }
-
-        .css-1v3fvcr h3 {
-            font-size: 20px !important;
-        }
     </style>
     """
