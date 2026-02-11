@@ -1,7 +1,8 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
-import platform
+import matplotlib.font_manager as fm
+import os
 
 from core.calculator import calculate_equal_payment, calculate_equal_principal
 from core.strategy import recommend_strategy_advanced
@@ -17,15 +18,15 @@ st.set_page_config(
     layout="wide"
 )
 
-# 한글 폰트 설정 (matplotlib)
-if platform.system() == "Windows":
-    plt.rcParams['font.family'] = 'Malgun Gothic'
-elif platform.system() == "Darwin":
-    plt.rcParams['font.family'] = 'AppleGothic'
-else:
-    plt.rcParams['font.family'] = 'NanumGothic'
+font_path = "NanumGothic.otf"
 
-plt.rcParams['axes.unicode_minus'] = False
+if os.path.exists(font_path):
+    fm.fontManager.addfont(font_path)
+    font_name = fm.FontProperties(fname=font_path).get_name()
+    plt.rcParams["font.family"] = font_name
+
+plt.rcParams["axes.unicode_minus"] = False
+
 
 st.markdown(load_css(), unsafe_allow_html=True)
 
