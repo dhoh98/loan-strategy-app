@@ -122,13 +122,21 @@ if analyze_btn:
     # ==================================================
     st.subheader("📉 잔액 추이 비교")
 
-    plt.figure()
-    plt.plot(df_equal["월"], df_equal["잔액"], label="원리금균등")
-    plt.plot(df_principal["월"], df_principal["잔액"], label="원금균등")
-    plt.xlabel("월")
-    plt.ylabel("잔액")
-    plt.legend()
-    st.pyplot(plt)
+    fig1, ax1 = plt.subplots(figsize=(6,4))  # 👈 크기 줄이기
+
+    ax1.plot(df_equal["월"], df_equal["잔액"], label="원리금균등")
+    ax1.plot(df_principal["월"], df_principal["잔액"], label="원금균등")
+
+    ax1.set_xlabel("월")
+    ax1.set_ylabel("잔액")
+    ax1.legend()
+
+    plt.tight_layout()
+
+    col1, col2, col3 = st.columns([1,2,1])  # 👈 가운데 정렬
+    with col2:
+        st.pyplot(fig1)
+
 
     # ==================================================
     # 월 상환액 비교
@@ -138,13 +146,21 @@ if analyze_btn:
     df_equal["월상환액"] = df_equal["원금상환"] + df_equal["이자"]
     df_principal["월상환액"] = df_principal["원금상환"] + df_principal["이자"]
 
-    plt.figure()
-    plt.plot(df_equal["월"], df_equal["월상환액"], label="원리금균등")
-    plt.plot(df_principal["월"], df_principal["월상환액"], label="원금균등")
-    plt.xlabel("월")
-    plt.ylabel("월 상환액")
-    plt.legend()
-    st.pyplot(plt)
+    fig2, ax2 = plt.subplots(figsize=(6,4))  # 👈 크기 줄이기
+
+    ax2.plot(df_equal["월"], df_equal["월상환액"], label="원리금균등")
+    ax2.plot(df_principal["월"], df_principal["월상환액"], label="원금균등")
+
+    ax2.set_xlabel("월")
+    ax2.set_ylabel("월 상환액")
+    ax2.legend()
+
+    plt.tight_layout()
+
+    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        st.pyplot(fig2)
+
 
     # ==================================================
     # 전략 점수 비교 (레이더)
