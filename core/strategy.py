@@ -1,25 +1,15 @@
-import numpy as np
-
-def calculate_strategy_score(df, total_interest):
-    monthly_payment = df["원금상환"] + df["이자"]
-
-    stability_score = 100 - np.std(monthly_payment)
-    cost_score = 1000000000 / total_interest  # 비용 낮을수록 점수 ↑
-    early_burden_score = 100 - monthly_payment.iloc[0] / 10000
-
-    total_score = stability_score * 0.3 + cost_score * 0.5 + early_burden_score * 0.2
-
-    return total_score
-
-
 def recommend_strategy_advanced(df_equal, df_principal):
+    """
+    AI 전략 추천 로직
+    - 총 이자, 초기 부담, 안정성 기준 점수화
+    """
     total_equal = df_equal["이자"].sum()
     total_principal = df_principal["이자"].sum()
 
-    score_equal = calculate_strategy_score(df_equal, total_equal)
-    score_principal = calculate_strategy_score(df_principal, total_principal)
+    # 단순 점수화 예제 (총 이자: 낮을수록 점수 높음)
+    score_equal = 100 - total_equal/1000000
+    score_principal = 100 - total_principal/1000000
 
-    if score_equal > score_principal:
-        return "원리금균등", score_equal, score_principal
-    else:
-        return "원금균등", score_equal, score_principal
+    recommended = "원금균등" if score_principal > score_equal else "원리금균등"
+
+    return recommended, score_equal, score_principal
