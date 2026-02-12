@@ -34,12 +34,31 @@ st.markdown("<h1 style='text-align:center; font-size:30px;'>💰 AI 대출 상�
 st.markdown("<p style='text-align:center; font-size:18px;'>전략 점수화 기반 의사결정 지원 시스템</p>", unsafe_allow_html=True)
 
 # ==================================================
-# 🔹 사이드바 입력
+# 🔹 사이드바 입력 (만원 단위 적용)
 # ==================================================
 st.sidebar.header("📌 대출 정보 입력")
-loan_amount = st.sidebar.number_input("대출 원금 (원)", value=10000000, step=1000000)
-interest_rate = st.sidebar.number_input("연 이자율 (%)", value=5.0, step=0.1)
-loan_term = st.sidebar.number_input("상환 기간 (년)", value=3, step=1)
+
+loan_amount_man = st.sidebar.number_input(
+    "대출 원금 (만원)",
+    value=1000,
+    step=100
+)
+
+loan_amount = loan_amount_man * 10000
+st.sidebar.markdown(f"💰 실제 대출 원금: **{loan_amount:,.0f} 원**")
+
+interest_rate = st.sidebar.number_input(
+    "연 이자율 (%)",
+    value=5.0,
+    step=0.1
+)
+
+loan_term = st.sidebar.number_input(
+    "상환 기간 (년)",
+    value=3,
+    step=1
+)
+
 analyze_btn = st.sidebar.button("🚀 전략 분석 시작")
 
 # ==================================================
@@ -70,7 +89,6 @@ def plot_radar(score_equal, score_principal):
 # ==================================================
 if analyze_btn:
 
-    # 계산
     df_equal = calculate_equal_payment(loan_amount, interest_rate, loan_term)
     df_principal = calculate_equal_principal(loan_amount, interest_rate, loan_term)
 
@@ -79,9 +97,7 @@ if analyze_btn:
 
     recommended, score_equal, score_principal = recommend_strategy_advanced(df_equal, df_principal)
 
-    # ==================================================
     # KPI 카드
-    # ==================================================
     st.subheader("📊 핵심 지표 요약")
     col1, col2, col3 = st.columns(3)
 
@@ -99,12 +115,8 @@ if analyze_btn:
 
     col_left, col_right = st.columns(2)
 
-    # -----------------------------
-    # 📉 잔액 추이 비교
-    # -----------------------------
     with col_left:
         st.markdown("### 📉 잔액 추이 비교")
-
         fig1, ax1 = plt.subplots(figsize=(6,4))
         ax1.plot(df_equal["월"], df_equal["잔액"], label="원리금균등", linewidth=2)
         ax1.plot(df_principal["월"], df_principal["잔액"], label="원금균등", linewidth=2)
@@ -114,9 +126,6 @@ if analyze_btn:
         plt.tight_layout()
         st.pyplot(fig1)
 
-    # -----------------------------
-    # 💸 월 상환액 비교
-    # -----------------------------
     with col_right:
         st.markdown("### 💸 월 상환액 비교")
 
@@ -132,15 +141,11 @@ if analyze_btn:
         plt.tight_layout()
         st.pyplot(fig2)
 
-    # ==================================================
     # 전략 점수 비교
-    # ==================================================
     st.subheader("📈 전략 점수 비교 (AI 다중 기준 평가)")
     plot_radar(score_equal, score_principal)
 
-    # ==================================================
     # AI 전략 설명
-    # ==================================================
     st.subheader("🤖 AI 전략 해설")
 
     if recommended == "원금균등":
@@ -150,9 +155,7 @@ if analyze_btn:
         st.success("현금 흐름 안정성 측면에서 원리금균등 방식이 우수합니다.")
         st.info("매월 일정한 상환액으로 재무 계획 수립이 용이합니다.")
 
-    # ==================================================
-    # 상세 상환 스케줄
-    # ==================================================
+    # 상세 스케줄
     with st.expander("📂 상세 상환 스케줄 보기"):
         st.write("원리금균등 상환 스케줄")
         st.dataframe(df_equal)
