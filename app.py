@@ -29,7 +29,7 @@ plt.rcParams["axes.unicode_minus"] = False
 # CSS 적용
 st.markdown(load_css(), unsafe_allow_html=True)
 
-# 제목 크기 조정
+# 제목
 st.markdown("<h1 style='text-align:center; font-size:30px;'>💰 AI 대출 상환 전략 분석기 PRO</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align:center; font-size:18px;'>전략 점수화 기반 의사결정 지원 시스템</p>", unsafe_allow_html=True)
 
@@ -69,6 +69,7 @@ def plot_radar(score_equal, score_principal):
 # 🔹 분석 실행
 # ==================================================
 if analyze_btn:
+
     # 계산
     df_equal = calculate_equal_payment(loan_amount, interest_rate, loan_term)
     df_principal = calculate_equal_principal(loan_amount, interest_rate, loan_term)
@@ -79,7 +80,7 @@ if analyze_btn:
     recommended, score_equal, score_principal = recommend_strategy_advanced(df_equal, df_principal)
 
     # ==================================================
-    # KPI 카드 영역
+    # KPI 카드
     # ==================================================
     st.subheader("📊 핵심 지표 요약")
     col1, col2, col3 = st.columns(3)
@@ -92,36 +93,47 @@ if analyze_btn:
         kpi_card("AI 추천 전략", f"{recommended}")
 
     # ==================================================
-    # 잔액 비교 차트
+    # 📊 차트 2개 한 줄 배치
     # ==================================================
-    st.subheader("📉 잔액 추이 비교")
-    fig, ax = plt.subplots(figsize=(8,4))
-    ax.plot(df_equal["월"], df_equal["잔액"], label="원리금균등", linewidth=2)
-    ax.plot(df_principal["월"], df_principal["잔액"], label="원금균등", linewidth=2)
-    ax.set_xlabel("월")
-    ax.set_ylabel("잔액")
-    ax.legend()
-    plt.tight_layout()
-    st.pyplot(fig)
+    st.subheader("📊 상환 비교 분석")
+
+    col_left, col_right = st.columns(2)
+
+    # -----------------------------
+    # 📉 잔액 추이 비교
+    # -----------------------------
+    with col_left:
+        st.markdown("### 📉 잔액 추이 비교")
+
+        fig1, ax1 = plt.subplots(figsize=(6,4))
+        ax1.plot(df_equal["월"], df_equal["잔액"], label="원리금균등", linewidth=2)
+        ax1.plot(df_principal["월"], df_principal["잔액"], label="원금균등", linewidth=2)
+        ax1.set_xlabel("월")
+        ax1.set_ylabel("잔액")
+        ax1.legend()
+        plt.tight_layout()
+        st.pyplot(fig1)
+
+    # -----------------------------
+    # 💸 월 상환액 비교
+    # -----------------------------
+    with col_right:
+        st.markdown("### 💸 월 상환액 비교")
+
+        df_equal["월상환액"] = df_equal["원금상환"] + df_equal["이자"]
+        df_principal["월상환액"] = df_principal["원금상환"] + df_principal["이자"]
+
+        fig2, ax2 = plt.subplots(figsize=(6,4))
+        ax2.plot(df_equal["월"], df_equal["월상환액"], label="원리금균등", linewidth=2)
+        ax2.plot(df_principal["월"], df_principal["월상환액"], label="원금균등", linewidth=2)
+        ax2.set_xlabel("월")
+        ax2.set_ylabel("월 상환액")
+        ax2.legend()
+        plt.tight_layout()
+        st.pyplot(fig2)
 
     # ==================================================
-    # 월 상환액 비교 차트
-    # ==================================================
-    st.subheader("💸 월 상환액 비교")
-    df_equal["월상환액"] = df_equal["원금상환"] + df_equal["이자"]
-    df_principal["월상환액"] = df_principal["원금상환"] + df_principal["이자"]
-
-    fig, ax = plt.subplots(figsize=(8,4))
-    ax.plot(df_equal["월"], df_equal["월상환액"], label="원리금균등", linewidth=2)
-    ax.plot(df_principal["월"], df_principal["월상환액"], label="원금균등", linewidth=2)
-    ax.set_xlabel("월")
-    ax.set_ylabel("월 상환액")
-    ax.legend()
-    plt.tight_layout()
-    st.pyplot(fig)
-
-    # ==================================================
-    # 전략 점수 비교 (레이더)
+    # 전략 점수 비교
     # ==================================================
     st.subheader("📈 전략 점수 비교 (AI 다중 기준 평가)")
     plot_radar(score_equal, score_principal)
@@ -130,6 +142,7 @@ if analyze_btn:
     # AI 전략 설명
     # ==================================================
     st.subheader("🤖 AI 전략 해설")
+
     if recommended == "원금균등":
         st.success("총 이자 비용 절감 측면에서 원금균등 방식이 우수합니다.")
         st.info("초기 상환 부담은 높지만, 장기적으로 비용 효율이 좋습니다.")
