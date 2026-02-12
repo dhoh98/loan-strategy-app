@@ -74,7 +74,7 @@ def plot_radar(score_equal, score_principal):
     values_equal += values_equal[:1]
     values_principal += values_principal[:1]
 
-    fig, ax = plt.subplots(figsize=(5,5), subplot_kw=dict(polar=True))
+    fig, ax = plt.subplots(figsize=(3.8,3.8), subplot_kw=dict(polar=True))
     ax.plot(angles, values_equal, label="원리금균등", linewidth=2)
     ax.plot(angles, values_principal, label="원금균등", linewidth=2)
     ax.fill(angles, values_equal, alpha=0.1)
