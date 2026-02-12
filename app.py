@@ -65,24 +65,39 @@ analyze_btn = st.sidebar.button("🚀 전략 분석 시작")
 # 🔹 레이더 차트 함수
 # ==================================================
 def plot_radar(score_equal, score_principal):
-    categories = ["총비용", "안정성", "초기부담"]
-    values_equal = [score_equal * 0.5, score_equal * 0.3, score_equal * 0.2]
-    values_principal = [score_principal * 0.5, score_principal * 0.3, score_principal * 0.2]
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import streamlit as st
 
-    angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False)
-    angles = np.concatenate((angles, [angles[0]]))
+    categories = list(score_equal.keys())
+    values_equal = list(score_equal.values())
+    values_principal = list(score_principal.values())
+
+    N = len(categories)
+
+    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
     values_equal += values_equal[:1]
     values_principal += values_principal[:1]
+    angles += angles[:1]
 
-    fig, ax = plt.subplots(figsize=(3.8,3.8), subplot_kw=dict(polar=True))
-    ax.plot(angles, values_equal, label="원리금균등", linewidth=2)
-    ax.plot(angles, values_principal, label="원금균등", linewidth=2)
-    ax.fill(angles, values_equal, alpha=0.1)
-    ax.fill(angles, values_principal, alpha=0.1)
+    # 🔥 핵심: 크기 줄이고 DPI 낮춤
+    fig, ax = plt.subplots(figsize=(3.2, 3.2), dpi=100, subplot_kw=dict(polar=True))
+
+    ax.plot(angles, values_equal, linewidth=1.5, label="원리금균등")
+    ax.fill(angles, values_equal, alpha=0.2)
+
+    ax.plot(angles, values_principal, linewidth=1.5, label="원금균등")
+    ax.fill(angles, values_principal, alpha=0.2)
+
     ax.set_xticks(angles[:-1])
-    ax.set_xticklabels(categories)
-    ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
-    st.pyplot(fig)
+    ax.set_xticklabels(categories, fontsize=8)
+    ax.set_yticklabels([])
+
+    ax.legend(loc='upper right', bbox_to_anchor=(1.3, 1.1), fontsize=8)
+
+    # 🔥 제일 중요
+    st.pyplot(fig, use_container_width=False)
+
 
 # ==================================================
 # 🔹 분석 실행
