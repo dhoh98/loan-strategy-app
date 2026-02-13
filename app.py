@@ -140,7 +140,19 @@ if analyze_btn:
     # 상세 스케줄
     # =========================
     with st.expander("📂 상세 상환 스케줄 보기"):
+
+        # 복사본 생성 (원본 보호)
+        df_equal_display = df_equal.copy()
+        df_principal_display = df_principal.copy()
+
+        # 숫자 컬럼만 십의 자리 반올림
+        for df in [df_equal_display, df_principal_display]:
+            numeric_cols = df.select_dtypes(include=["float", "int"]).columns
+            df[numeric_cols] = df[numeric_cols].round(-1).astype(int)
+
         st.write("원리금균등 상환 스케줄")
-        st.dataframe(df_equal)
+        st.dataframe(df_equal_display, use_container_width=True)
+
         st.write("원금균등 상환 스케줄")
-        st.dataframe(df_principal)
+        st.dataframe(df_principal_display, use_container_width=True)
+
