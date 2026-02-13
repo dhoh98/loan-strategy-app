@@ -141,18 +141,29 @@ if analyze_btn:
     # =========================
     with st.expander("📂 상세 상환 스케줄 보기"):
 
-        # 복사본 생성 (원본 보호)
         df_equal_display = df_equal.copy()
         df_principal_display = df_principal.copy()
 
-        # 숫자 컬럼만 십의 자리 반올림
         for df in [df_equal_display, df_principal_display]:
+
+            # 숫자 컬럼 중에서 '월' 제외
             numeric_cols = df.select_dtypes(include=["float", "int"]).columns
+            numeric_cols = [col for col in numeric_cols if col != "월"]
+
+            # 십의 자리 반올림
             df[numeric_cols] = df[numeric_cols].round(-1).astype(int)
+
+            # 천 단위 콤마 적용
+            for col in numeric_cols:
+                df[col] = df[col].apply(lambda x: f"{x:,}")
+
+            # 월 컬럼 이름 변경
+            df.rename(columns={"월": "개월"}, inplace=True)
 
         st.write("원리금균등 상환 스케줄")
         st.dataframe(df_equal_display, use_container_width=True)
 
         st.write("원금균등 상환 스케줄")
         st.dataframe(df_principal_display, use_container_width=True)
+
 
